@@ -41,3 +41,58 @@ plt.hist(life_exp, bins=20)
 plt.show()
 plt.clf()
 
+
+plt.scatter(gdp_cap, life_exp)
+plt.xscale('log') 
+
+xlab = 'GDP per Capita [in USD]'
+ylab = 'Life Expectancy [in years]'
+title = 'World Development in 2007'
+
+plt.xlabel(xlab)
+plt.ylabel(ylab)
+plt.title(title)
+plt.show()
+
+# Scatter plot
+plt.scatter(gdp_cap, life_exp)
+
+plt.xscale('log') 
+plt.xlabel('GDP per Capita [in USD]')
+plt.ylabel('Life Expectancy [in years]')
+plt.title('World Development in 2007')
+
+tick_val = [1000,10000,100000]
+tick_lab = ['1k','10k','100k']
+
+plt.xticks(tick_val, tick_lab)
+plt.show()
+
+import numpy as np
+
+np_pop = np.array(pop)
+
+np_pop = np_pop * 2
+
+plt.scatter(gdp_cap, life_exp, s = np_pop)
+
+plt.xscale('log') 
+plt.xlabel('GDP per Capita [in USD]')
+plt.ylabel('Life Expectancy [in years]')
+plt.title('World Development in 2007')
+plt.xticks([1000, 10000, 100000],['1k', '10k', '100k'])
+plt.show()
+plt.clf()
+
+plt.scatter(x = gdp_cap, y = life_exp, s = np.array(pop) * 2, c = col, alpha = 0.8)
+
+plt.xscale('log') 
+plt.xlabel('GDP per Capita [in USD]')
+plt.ylabel('Life Expectancy [in years]')
+plt.title('World Development in 2007')
+plt.xticks([1000,10000,100000], ['1k','10k','100k'])
+plt.text(1550, 71, 'India')
+plt.text(5700, 80, 'China')
+plt.grid(True)
+plt.show()
+plt.clf()
