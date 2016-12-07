@@ -108,3 +108,47 @@ for x in np_height:
 # np_baseball ia 2D Numpy array
 for y in np.nditer(np_baseball):
     print(y, end = " ")
+
+
+#############################
+#Loop over DataFrame
+#############################
+
+#for lab, row in brics.iterrows() 
+# expression
+
+#use method iterrows()
+import pandas as pd
+cars = pd.read_csv('cars.csv', index_col = 0)
+
+for lab, row in cars.iterrows() :
+    print(lab)
+    print(row)
+
+
+import pandas as pd
+cars = pd.read_csv('cars.csv', index_col = 0)
+
+for lab, row in cars.iterrows() :
+    print(lab +": " +str(row['cars_per_cap']))
+
+
+
+#add new column with for loop
+
+import pandas as pd
+cars = pd.read_csv('cars.csv', index_col = 0)
+
+# upper() is a string method here
+for lab, row in cars.iterrows() :
+    cars.loc[lab, "COUNTRY"] = row["country"].upper()
+
+print(cars)
+
+#iterrows interate with each row in panda DataFrame is not efficient when data is big, so use apply() function is fast 
+#add new column with for loop and apply() function
+
+import pandas as pd
+cars = pd.read_csv('cars.csv', index_col = 0)
+
+cars["COUNTRY"] = cars["country"].apply(str.upper)
