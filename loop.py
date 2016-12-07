@@ -44,7 +44,7 @@ for iterates in areas:
 #for loop over a list
 #####################
 
-# enumerate()
+# use function enumerate() 
 #add index and values in the same time  with e
 
 areas = [11.25, 18.0, 20.0, 10.75, 9.50]
@@ -72,4 +72,39 @@ for x, y in house:
     print("the " + x + " is " + str(y) + " sqm")o
 
 
+######################
+#for loop over a dictionary
+######################
 
+#for key, value in data.items() :
+#      expression
+
+#use method  items() 
+
+europe = {'spain':'madrid', 'france':'paris', 'germany':'bonn', 
+          'norway':'oslo', 'italy':'rome', 'poland':'warsaw', 'australia':'vienna' }
+          
+for x, y in europe.items():
+    print("the capital of " + x + " is " + y ) 
+
+
+######################
+#for loop over Numpy Array
+##########################
+
+# for x in np.nditer(array):
+#     expression
+
+# use np.nditer() functions
+
+
+import numpy as np
+
+#np_height is a Numpy array
+# end arg in print is to mesmerizing the output size
+for x in np_height:
+     print( str(x) + " inches", end = " " )
+
+# np_baseball ia 2D Numpy array
+for y in np.nditer(np_baseball):
+    print(y, end = " ")
