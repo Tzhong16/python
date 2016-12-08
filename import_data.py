@@ -109,4 +109,59 @@ data['Fare']
 # work with mixed dataypes 
 # recfromtxt() have already set the delimiter as ',' ; names = True; dtype = None by Default
 
+file = 'titanic.csv'
 
+d = np.recfromcsv(file)
+
+print(d[:3])
+
+
+
+
+
+#############################################################
+#Pandas  --- import file as data.frame
+############################################################
+
+
+# example 1 
+import pandas as pd
+
+file = 'titanic.csv'
+
+df = pd.read_csv(file)
+
+print(df.head())
+
+
+
+
+# example 2
+
+file = 'digits.csv'
+
+data = pd.read_csv(file, nrows = 5, header = None)
+
+# Build a numpy array from the DataFrame: data_array
+data_array = data.values
+
+print(type(data_array))
+
+
+# example 3 
+
+import matplotlib.pyplot as plt
+
+file = 'titanic_corrupt.txt'
+
+# sep arg is a pandas version of delimiter
+#comment takes characters that comments occur after in the file, which in this case is '#'
+#na_values takes a list of strings to recognize as NA/NaN
+data = pd.read_csv(file, sep= '\t', comment='#', na_values= ['Nothing'])
+
+print(data.head())
+
+pd.DataFrame.hist(data[['Age']])
+plt.xlabel('Age (years)')
+plt.ylabel('count')
+plt.show()
