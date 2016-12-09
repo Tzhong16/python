@@ -11,4 +11,23 @@ print(engine.table_names())
 
 #Reflection is a automatic  process of reading the database and building the metadata based on that information
 
+from sqlalchemy import Table
+
+# Reflect census table from the engine: census
+census = Table('census', metadata, autoload=True, autoload_with=engine)
+
+print(repr(census))
+
+
+#example 2
+
+census = Table('census', metadata, autoload = True, autoload_with = engine)
+
+print(census.columns.keys())
+
+#use metadata method to find out more table imformation like column names and type
+print(repr(metadata.tables['census']))
+
+
+
 
