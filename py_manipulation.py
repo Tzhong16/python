@@ -1,4 +1,6 @@
+########################################################
 # Connect to  Database 
+########################################################
 # 1. create a engine connect to the file
 # 
 
@@ -29,5 +31,65 @@ print(census.columns.keys())
 print(repr(metadata.tables['census']))
 
 
+#########################
+#basic method to send query to database
+#########################
+
+stmt = 'SELECT * FROM census'
+
+# fetchall() is use to take the data from table
+results = connection.execute(stmt).fetchall()
+
+print(results)
 
 
+########################
+# select methond from sqlalchemy
+#######################
+
+from sqlalchemy import select
+
+census = Table('census', metadata, autoload=True, autoload_with=engine)
+
+stmt = select([census])
+
+print(stmt)
+
+print(connection.execute(stmt).fetchall())
+
+# Get the first row of the results by using an index: first_row
+first_row = results[0]
+
+print(first_row)
+
+print(first_row[0])
+
+print(first_row['state'])
+
+
+##########################
+#connect to postgraSql
+##########################
+
+
+from sqlalchemy import create_engine
+
+
+engine = create_engine('postgresql+psycopg2://student:datacamp@postgresql.csrrinzqubik.us-east-1.rds.amazonaws.com:5432/census')
+
+
+print(engine.table_names())
+
+
+#################
+#filter data 
+#################
+
+stmt = select([census])
+
+stmt = stmt.where(census.columns.state == 'New York')
+
+results = connection.execute(stmt).fetchall()
+
+for result in results:
+    print(result.age, result.sex, result.pop2008)
