@@ -93,3 +93,14 @@ results = connection.execute(stmt).fetchall()
 
 for result in results:
     print(result.age, result.sex, result.pop2008)
+
+
+#example 2 
+stmt = select([census])
+
+stmt = stmt.where(census.columns.state.in_(states))
+
+# Loop over the ResultProxy and print the state and its population in 2000
+for result in connection.execute(stmt):
+    print(result.state, result.pop2000)
+
