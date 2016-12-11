@@ -125,3 +125,61 @@ stmt = stmt.where(
 # Loop over the ResultProxy printing the age and sex
 for result in connection.execute(stmt):
     print(result.age, result.sex)
+
+
+#####################
+#order_by()
+####################
+
+# Build a query to select the state column: stmt
+stmt = select([census.columns.state])
+
+stmt = stmt.order_by(census.columns.state)
+
+results = connection.execute(stmt).fetchall()
+
+print(results[:10])
+
+
+#######
+#desc()
+######
+# wrapped with desc()
+
+from sqlalchemy import desc
+
+stmt = select([census.columns.state])
+
+rev_stmt = stmt.order_by(desc(census.columns.state))
+
+rev_results = connection.execute(rev_stmt).fetchall()
+
+print(rev_results[:10])
+
+
+
+
+#order_by multiple columns
+
+stmt = select([census.columns.state, census.columns.age])
+
+stmt = stmt.order_by(census.columns.state, desc(census.columns.age))
+
+results = connection.execute(stmt).fetchall()
+
+print(results[:20])
+
+
+#######################
+# count(), sum(), scalar()
+#########################
+
+#scalar() for getting just the value of a query that returns only one row and column
+
+# Build a query to count the distinct states values: stmt
+stmt = select([func.count(census.columns.state.distinct())])
+
+distinct_state_count = connection.execute(stmt).scalar()
+
+print(distinct_state_count)
+
