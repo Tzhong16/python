@@ -183,3 +183,37 @@ distinct_state_count = connection.execute(stmt).scalar()
 
 print(distinct_state_count)
 
+
+# example 2
+
+from sqlalchemy.sql import func
+
+# Build a query to select the state and count of ages by state: stmt
+stmt = select([census.columns.state, func.count(census.columns.age)])
+
+stmt = stmt.group_by(census.columns.state)
+
+results = connection.execute(stmt).fetchall()
+
+print(results)
+
+# Print the keys/column names of the results returned
+
+print(results[0].keys())
+
+
+#
+
+from sqlalchemy.sql import func
+
+pop2008_sum = func.sum(census.columns.pop2008).label('population')
+
+stmt = select([census.columns.state, pop2008_sum])
+
+stmt = stmt.group_by(census.columns.state)
+
+results = connection.execute(stmt).fetchall()
+
+print(results)
+
+print(results[0].keys())
