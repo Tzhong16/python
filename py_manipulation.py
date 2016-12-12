@@ -449,3 +449,136 @@ results_proxy.close()
 # Print the count by state
 print(state_count)
 
+
+
+
+#########################################################
+# Built own database and keep update time
+#########################################################
+
+
+from sqlalchemy import Table, Column, String, Integer, Float, Boolean
+
+data = Table('data', metadata,
+             Column('name', String(255)),
+             Column('count', Integer()),
+             Column('amount', Float()),
+             Column('valid', Boolean())
+)
+
+# Use the metadata to create the table
+metadata.create_all(engine)
+
+# Print table repr
+print(repr(data))
+
+
+##############
+#constrains
+##############
+
+from sqlalchemy import Table, Column, String, Integer, Float, Boolean
+
+data = Table('data', metadata,
+             Column('name', String(255), unique= True),
+             Column('count', Integer(), default= 1),
+             Column('amount', Float()),
+             Column('valid', Boolean(), default= False)
+)
+
+metadata.create_all(engine)
+
+print(repr(metadata.tables['data']))
+
+
+###################
+#insert data 
+###################
+
+
+# insert one data
+
+from sqlalchemy import insert, select
+
+stmt = insert(data).values(name='Anna', count=1, amount=1000.00, valid=True)
+
+results = connection.execute(stmt)
+
+print(results.rowcount)
+
+stmt = select([data]).where(data.columns.name == 'Anna')
+
+print(connection.execute(stmt).first())
+
+
+# multipule insert
+
+# Build a list of dictionaries: values_list
+values_list = [
+    {'name': 'Anna', 'count': 1, 'amount': 1000.00, 'valid': True},
+    {'name':'Taylor', 'count': 1, 'amount': 750.00, 'valid': False}
+]
+
+# Build an insert statement for the data table: stmt
+stmt = insert(data)
+
+results = connection.execute(stmt, values_list)
+
+print(results.rowcount)
+
+
+###################
+#update data
+###################
+
+# have a look of the row data of 'New York' 
+select_stmt = select([state_fact]).where(state_fact.columns.name == 'New York')
+
+print(connection.execute(select_stmt).fetchall())
+
+stmt = update(state_fact).values(fips_state = 36)
+
+# Append a where clause to limit it to records for New York state
+stmt = stmt.where(state_fact.columns.name == 'New York')
+
+results = connection.execute(stmt)
+
+print(results.rowcount)
+
+# Execute the select_stmt again to view the changes
+print(connection.execute(select_stmt).fetchall())
+
+
+# update multiples data
+
+# Build a statement to update the notes to 'The Wild West': stmt
+stmt = update(state_fact).values(notes = 'The Wild West')
+
+# Append a where clause to match the West census region records
+stmt = stmt.where(state_fact.columns.census_region_name == 'West')
+
+results = connection.execute(stmt)
+
+print(results.rowcount)
+
+
+###########
+#correlate update
+##########
+
+# Build a statement to select name from state_fact: stmt
+fips_stmt = select([state_fact.columns.name])
+
+# Append a where clause to Match the fips_state to flat_census fips_code
+fips_stmt = fips_stmt.where(
+    state_fact.columns.fips_state == flat_census.columns.fips_code)
+
+# Build an update statement to set the name to fips_stmt: update_stmt
+update_stmt = update(flat_census).values(state_name = fips_stmt)
+
+# Execute update_stmt: results
+results = connection.execute(update_stmt)
+
+# Print rowcount
+print(results.rowcount)
+
