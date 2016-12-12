@@ -582,3 +582,65 @@ results = connection.execute(update_stmt)
 # Print rowcount
 print(results.rowcount)
 
+
+
+#######################
+#delete data
+#######################
+
+# example 1: empty a table
+ 
+from sqlalchemy import delete, select
+
+# Build a statement to empty the census table: stmt
+stmt = delete(census)
+
+results = connection.execute(stmt)
+
+print(results.rowcount)
+
+stmt = select([census])
+
+# Print the results of executing the statement to verify there are no rows
+print(connection.execute(stmt).fetchall())
+
+
+
+
+#example 2 : wrapped where clause with delete 
+
+# Build a statement to count records using the sex column for Men (M) age 36: stmt
+stmt = select([func.count(census.columns.sex)]).where(
+    and_(census.columns.sex == 'M',
+         census.columns.age == 36)
+)
+
+# Execute the select statement and use the scalar() fetch method to save the record count
+to_delete = connection.execute(stmt).scalar()
+
+# Build a statement to delete records from the census table: stmt_del
+stmt_del = delete(census)
+
+stmt_del = stmt_del.where(
+    and_(census.columns.sex == 'M',
+         census.columns.age == 36)
+)
+
+results = connection.execute(stmt_del)
+
+# Print affected rowcount and to_delete record count, make sure they match
+print(results.rowcount, to_delete)
+
+# drop the data though drop the table ###############
+# Drop the state_fact table
+state_fact.drop(engine)
+
+# Check to see if state_fact exists
+print(state_fact.exists(engine))
+
+# Drop all tables
+metadata.drop_all(engine)
+
+# Check to see if census exists
+print(census.exists(engine))
+
