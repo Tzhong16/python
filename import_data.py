@@ -165,3 +165,64 @@ pd.DataFrame.hist(data[['Age']])
 plt.xlabel('Age (years)')
 plt.ylabel('count')
 plt.show()
+
+
+
+##############################################################
+#import data from database
+##############################################################
+
+# common database: PostgreSQL , MySql, SQLite
+# STEP: 
+#	1. import package and function
+#	2. create engine
+#	3. connect to engine
+#	4. query to database
+#	5. save query as a dataframe
+#	6. close connection
+
+
+from sqlalchemy import create_engine
+import pandas as pd
+# Create engine: engine
+engine = create_engine('sqlite:///Chinook.sqlite')
+
+table_names = engine.table_names()
+
+print(table_names)
+
+# Open engine connection: con
+con = engine.connect()
+
+rs = con.execute('select * from Album')
+
+# Save results of the query to DataFrame: df
+df = pd.DataFrame(rs.fetchall())
+
+con.close()
+
+print(df.head())
+
+
+
+
+#########################
+#customize the SQL query
+########################
+
+from sqlalchemy import create_engine
+import pandas as pd
+engine = create_engine('sqlite:///Northwind.sqlite')
+
+# Perform query and save results to DataFrame: df
+with engine.connect() as con:
+    rs = con.execute('select LastName, Title from Employee')
+    df = pd.DataFrame(rs.fetchmany(size = 3))
+    df.columns = rs.keys()
+
+# Print the length of the DataFrame df
+print(len(df))
+
+print(df.head())
+
+
