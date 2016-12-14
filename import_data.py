@@ -260,17 +260,13 @@ print(df.head())
 #Panda to query
 ######################################################
 
-# Import packages
 from sqlalchemy import create_engine
 import pandas as pd
 
-# Create engine: engine
 engine = create_engine('sqlite:///Chinook.sqlite')
 
-# Execute query and store records in DataFrame: df
 df = pd.read_sql_query('select * from Album', engine)
 
-# Print head of DataFrame
 print(df.head())
 
 # Open engine in context manager
@@ -282,4 +278,46 @@ with engine.connect() as con:
 
 # Confirm that both methods yield the same result: does df = df1 ?
 print(df.equals(df1))
+
+
+
+####more complex query####
+from sqlalchemy import create_engine
+import pandas as pd
+
+engine = create_engine('sqlite:///Chinook.sqlite')
+
+df = pd.read_sql_query('select * from Employee where EmployeeId >= 6 order by BirthDate', engine)
+
+print(df.head())
+
+
+
+############################
+#JOIN
+###########################
+
+import pandas as pd
+from sqlalchemy import create_engine
+engine = create_engine('sqlite:///Chinook.sqlite')
+
+# Open engine in context manager
+# Perform query and save results to DataFrame: df
+with engine.connect() as con:
+    rs = con.execute('select Title, Name from Album INNER JOIN Artist on Album.ArtistID = Artist.ArtistID')
+    df = pd.DataFrame(rs.fetchall())
+    df.columns = rs.keys()
+
+print(df.head())
+
+
+# example 2
+
+import pandas as pd
+from sqlalchemy import create_engine
+engine = create_engine('sqlite:///Chinook.sqlite')
+
+df = pd.read_sql_query('select * from PlaylistTrack INNER JOIN Track on PlaylistTrack.TrackId = Track.TrackId where Milliseconds < 250000', engine)
+
+print(df.head())
 
